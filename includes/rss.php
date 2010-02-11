@@ -3,13 +3,7 @@
 header('Content-type: application/rss+xml; charset=utf-8');
 setlocale(LC_ALL, 'fi_FI.utf8');
 
-try {
-	$db = new PDO('sqlite:/var/www/WWW/menu/includes/menut.sqlite');
-} catch(PDOException $e)
-{
-	echo $e->getMessage();
-}
-$db->setAttribute( PDO::ATTR_ERRMODE,  PDO::ERRMODE_WARNING  );
+require('db.php');
 
 if (!empty($_REQUEST['username']) && isset($_REQUEST['newuser'])) {
 	$sql = 'SELECT *
@@ -67,7 +61,6 @@ for ($i = 0; $i <= 23; $i++) {
 <description>
 <?php
 
-require('includes/menutable.php');
 echo htmlspecialchars(print_menutable($date, $db));
 
 ?>

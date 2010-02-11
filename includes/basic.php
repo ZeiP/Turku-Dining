@@ -5,13 +5,7 @@ setlocale(LC_ALL, 'fi_FI.utf8');
 
 session_start();
 
-try {
-	$db = new PDO('sqlite:/var/www/WWW/menu/includes/menut.sqlite');
-} catch(PDOException $e)
-{
-	echo $e->getMessage();
-}
-$db->setAttribute( PDO::ATTR_ERRMODE,  PDO::ERRMODE_WARNING  );
+require('db.php');
 
 if (!empty($_REQUEST['username']) && isset($_REQUEST['newuser'])) {
 	$sql = 'SELECT *
@@ -108,7 +102,6 @@ if ($usersettings['showmap']) {
 	require('includes/map.php');
 }
 
-require('includes/menutable.php');
 echo print_menutable($date, $db, $usersettings);
 
 ?>
