@@ -1,0 +1,52 @@
+body {
+	font-family: sans-serif !important;
+}
+table {
+	border-collapse: collapse;
+}
+th {
+	padding-top: 1.5em;
+	border-bottom: 1px solid black;
+}
+td {
+	border-bottom: 1px dotted gray;
+	padding: 0 0.5em;
+}
+td.description {
+	min-width: 30em;
+}
+td.diet {
+	min-width: 5em;
+}
+td.price {
+	width: 10em;
+}
+th a {
+	color: black;
+	text-decoration: none;
+}
+div#login {
+	position: absolute;
+	left: auto;
+	right: 0;
+	top: 0;
+	border-bottom: 1px solid black;
+	border-left: 1px solid black;
+	padding: 0.5em 1em 2em 2em;
+}
+div#login h2 {
+	font-size: 20px;
+}
+h2 {
+	font-size: 20px;
+}
+p#disclaimer {
+	font-style: italic;
+}
+
+div#footer {
+	padding: 1em;
+	margin: 1em;
+	background-color: lightgray;
+	display: block;
+}

@@ -1,0 +1,13 @@
+* Dieteistä selitteet; myös ernu-dietit oikeaan sarakkeeseen, ABBR-tagit dietteihin
+* Hintojen parsinta: ylimääräiset merkit pois.
+* �änestys
+* Paskaa-nappi
+* Upload kännykameralla kuvia ruoista
+* Twiittaus: mitä söin tänään?
+* Otsikkosolut piilottamaan ravintolan taulukon; kotisivut muualle
+* Oman tyylitiedoston käyttö
+* Facebook-sovellus
+*� Näytettävän päpivän valinta
+* Näytettävien ravintoloiden valinta
+* Asetusboksin asettelu on huono, menee päälle
+  * Miten ois avaa/sulje-linkki (JS)?

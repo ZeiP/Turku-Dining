@@ -1,0 +1,2 @@
+RewriteEngine On
+RewriteRule rss index.php?action=rss [L]
