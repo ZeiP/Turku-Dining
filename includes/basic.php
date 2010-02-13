@@ -1,12 +1,5 @@
 <?php
 
-header('Content-type: text/html; charset=utf-8');
-setlocale(LC_ALL, 'fi_FI.utf8');
-
-session_start();
-
-require('db.php');
-
 if (!empty($_REQUEST['username']) && isset($_REQUEST['newuser'])) {
 	$sql = 'SELECT *
 		FROM users
@@ -102,7 +95,7 @@ if ($usersettings['showmap']) {
 	require('includes/map.php');
 }
 
-echo print_menutable($date, $db, $usersettings);
+echo $obj->print_menutable($date);
 
 ?>
 

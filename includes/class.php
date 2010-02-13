@@ -4,6 +4,10 @@ class TurkuDining {
     var $db;
     var $usersettings;
 
+	function TurkuDining($db) {
+		$this->db = $db;
+	}
+
     function fetch_menu($id) {
 	    $sql = 'SELECT id, name, url, parser
 		    FROM restaurants
