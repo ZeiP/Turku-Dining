@@ -15,6 +15,9 @@ td {
 td.description {
 	min-width: 30em;
 }
+td.diet, td.price {
+	white-space: nowrap;
+}
 td.diet {
 	min-width: 5em;
 }
