@@ -1,7 +1,7 @@
 <?php
 
 try {
-	$db = new PDO('sqlite:/var/www/WWW/menu/includes/menut.sqlite');
+	$db = new PDO('sqlite:' . IDIR . '/db/menut.sqlite');
 } catch(PDOException $e)
 {
 	echo $e->getMessage();

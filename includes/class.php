@@ -180,7 +180,7 @@ class TurkuDining {
     $output.= '<table>';
     $dbdate = strftime('%Y-%m-%d', $date);
     while ($row = $res->fetch()) {
-	    $output.= '<tr><th colspan="3"><a href="' . htmlspecialchars($row['url']) . '">' . htmlspecialchars($row['name']) . '</a></th></tr>';
+	    $output.= '<tr><th colspan="3"><a href="' . $this->html_encode($row['url']) . '">' . $this->html_encode($row['name']) . '</a></th></tr>';
 	    $sql2 = 'SELECT description, diet, price, studentprice, staffprice, normalprice
 		    FROM servings
 		    WHERE restaurant_id = :id
@@ -203,7 +203,7 @@ class TurkuDining {
 		    else {
 			    $price = (($this->usersettings['studentprice']) ? $row['studentprice'] : implode(' / ', array($row['studentprice'], $row['staffprice'], $row['normalprice'])));
 		    }
-		    $output.= '<tr><td class="description">' . htmlspecialchars($row2['description']) . '</td><td class="diet">' . htmlspecialchars($row2['diet']) . '</td><td class="price">' . $price . '</td></tr>' . "\n";
+		    $output.= '<tr><td class="description">' . $this->html_encode($row2['description']) . '</td><td class="diet">' . $this->html_encode($row2['diet']) . '</td><td class="price">' . $this->html_encode($price) . '</td></tr>' . "\n";
 	    }
     }
     $output.= '</table>';
@@ -230,4 +230,8 @@ class TurkuDining {
     $output.= '</table>';
     return $output;
     }
+
+	function html_encode($string) {
+		return htmlspecialchars(html_entity_decode($string, ENT_NOQUOTES, 'UTF-8'));
+	}
 }
