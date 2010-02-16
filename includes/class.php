@@ -29,7 +29,7 @@ class TurkuDining {
 			    );
 		    preg_match_all('/' . implode($regexp_parts, '|') . '/s', $file, $matches);
 		    $return = $matches;
-		    handle_unica_menu($return, $this->db, $row['id']);
+		    $this->handle_unica_menu($return, $row['id']);
 	    }
 	    elseif ($row['parser'] == 'fazeramica') {
 		    preg_match('/<span>ruokalista<\/span>(.*)?<\/span>/s', $file, $matches);
@@ -47,7 +47,7 @@ class TurkuDining {
 			    $rows[$index] = explode('&nbsp;', $row);
 		    }
 		    $return = $rows;
-		    handle_fazeramica_menu($return, $date, $this->db, $id);
+		    $this->handle_fazeramica_menu($return, $date, $id);
 	    }
 	    else {
 		    return FALSE;
@@ -62,20 +62,29 @@ class TurkuDining {
 		    (description, diet, price, date, restaurant_id)
 		    VALUES(:descr, :diet, :price, DATE(:date), :resid)';
 	    $q = $this->db->prepare($sql);
+		$reset_dates = array();
 	    for ($i = 0; $i <= count($array[0]); $i++) {
 		    if (!empty($array[1][$i])) {
 			    $currweek = $array[1][$i];
 			    if ($currday !== NULL) {
-				    $date = format_date(weekday_to_numeral($currday), $currweek);
+				    $date = $this->format_date($this->weekday_to_numeral($currday), $currweek);
 			    }
 		    }
 		    if (!empty($array[2][$i])) {
 			    $currday = $array[2][$i];
 			    if ($currweek !== NULL) {
-				    $date = format_date(weekday_to_numeral($currday), $currweek);
+				    $date = $this->format_date($this->weekday_to_numeral($currday), $currweek);
 			    }
 		    }
 		    if (!empty($array[3][$i])) {
+				if (!in_array($date, $reset_dates)) {
+				$sql = 'DELETE FROM servings
+					WHERE restaurant_id = :resid
+						AND date = :date';
+				$delq = $this->db->prepare($sql);
+				$delq->execute(array('resid' => $id, 'date' => $date));
+				$reset_dates[] = $date;
+				}
 			    echo 'Inserting ' . $date . ': ' . $array[3][$i] . ' (' . $array[5][$i] . ') @ ' . $array[7][$i] . '<br />';
 			    $q->execute(array('descr' => $array[3][$i], 'diet' => $array[5][$i], 'price' => $array[7][$i], 'date' => $date, 'resid' => $id));
 		    }
@@ -88,13 +97,14 @@ class TurkuDining {
 		    (description, diet, price, date, restaurant_id)
 		    VALUES(:descr, :diet, :price, DATE(:date), :resid)';
 	    $q = $this->db->prepare($sql);
+		$reset_dates = array();
 	    foreach ($array as $row) {
 		    if (empty($row[0]))
 		    {
 			    continue;
 		    }
 		    elseif (empty($row[1]) && (empty($row[2]) || $row[2] == 'opiskelijat' || $row[3] == 'muut')) {
-			    $wday = weekday_to_numeral(trim($row[0]));
+			    $wday = $this->weekday_to_numeral(trim($row[0]));
 			    if ($wday) {
 				    $tmp = $dateparts;
 				    $tmp[2] = str_pad($tmp[2] + ($wday - 1), 2, 0, STR_PAD_LEFT);
@@ -103,6 +113,14 @@ class TurkuDining {
 			    echo 'Doing date ' . $wday . '<br />';
 		    }
 		    else {
+				if (!in_array($date, $reset_dates)) {
+				$sql = 'DELETE FROM servings
+					WHERE restaurant_id = :resid
+						AND date = :date';
+				$delq = $this->db->prepare($sql);
+				$delq->execute(array('resid' => $id, 'date' => $date));
+				$reset_dates[] = $date;
+				}
 			    echo 'Inserting ' . $date . ': ' . $row[0] . ' (' . $row[1] . ') @ ' . $row[2] . ' / ' . $row[3] . '<br />';
 			    $q->execute(array('descr' => $row[0], 'diet' => $row[1], 'price' => $row[2] . ' / ' . $row[3], 'date' => $date, 'resid' => $id));
 		    }
@@ -187,6 +205,27 @@ class TurkuDining {
 		    }
 		    $output.= '<tr><td class="description">' . htmlspecialchars($row2['description']) . '</td><td class="diet">' . htmlspecialchars($row2['diet']) . '</td><td class="price">' . $price . '</td></tr>' . "\n";
 	    }
+    }
+    $output.= '</table>';
+    return $output;
+    }
+
+    function print_full_menutable() {
+    $output = '';
+    $sql = 'SELECT r.name, s.description, s.date
+		FROM servings s
+		JOIN restaurants r
+		ON r.id = s.restaurant_id
+		ORDER BY date DESC';
+    $res = $this->db->query($sql);
+    $output.= '<table>';
+    $dbdate = strftime('%Y-%m-%d', $date);
+    while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
+	    $output.= '<tr>';
+		foreach ($row as $key => $val) {
+			$output.= '<td>' . $val . '</td>';
+		}
+	    $output.= '</tr>';
     }
     $output.= '</table>';
     return $output;
