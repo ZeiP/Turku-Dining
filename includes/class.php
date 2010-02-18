@@ -235,6 +235,6 @@ class TurkuDining {
 		return htmlspecialchars(html_entity_decode($string, ENT_NOQUOTES, 'UTF-8'));
 	}
 	function url ($target = '') {
-		return str_replace('index.php', '', $_SERVER['PHP_SELF']) . $target;
+		return 'http://' . $_SERVER['HTTP_HOST'] . str_replace('index.php', '', $_SERVER['PHP_SELF']) . $target;
 	}
 }

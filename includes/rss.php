@@ -42,9 +42,9 @@ $date = strtotime($datestr);
 <channel>
 <title>Turku Dining</title>
 <description>Turun opiskelijaruokaloiden ruokalistat</description>
-<link>http://www.asteriski.fi/~zeip/menu</link>
+<link><?php echo $obj->url(); ?></link>
 <language>fi</language>
-<webMaster>jyri-petteri.paloposki@iki.fi</webMaster>
+<webMaster>jyri-petteri.paloposki@iki.fi (Jyri-Petteri Paloposki)</webMaster>
 <lastBuildDate><?php echo date('D, d M Y H:i:s O'); ?></lastBuildDate>
 <pubDate><?php echo date('D, d M Y') . ' 00:00:01 ' . date('O'); ?></pubDate>
 <docs>http://www.rssboard.org/rss-specification</docs>
@@ -61,11 +61,11 @@ for ($i = 0; $i <= 23; $i++) {
 <description>
 <?php
 
-echo htmlspecialchars(print_menutable($date, $db));
+echo htmlspecialchars($obj->print_menutable($date, $db));
 
 ?>
 </description>
-<pubDate><?php echo date('D, d M Y') . ' 00:00:01 ' . date('O'); ?></pubDate>
+<pubDate><?php echo date('D, d M Y H') . ':00:01 ' . date('O'); ?></pubDate>
 </item>
 </channel>
 </rss>

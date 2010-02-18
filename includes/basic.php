@@ -19,7 +19,7 @@ $date = strtotime($datestr);
 <head>
 	<title>Turku Dining</title>
 	<link rel="stylesheet" type="text/css" href="styles.css" media="screen, projection, tty, tv" />
-	<link rel="alternate" type="application/rss+xml" title="RSS" href="rss">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $obj->url('rss'); ?>">
 </head>
 <body>
 <h1>Minne mennä?</h1>
