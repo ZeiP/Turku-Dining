@@ -11,6 +11,9 @@ switch (strtolower($_REQUEST['action'])	) {
 	case 'listall':
 		require('includes/listall.php');
 		break;
+	case 'settings':
+		require('includes/usersettings.php');
+		break;
 	default:
 		require('includes/basic.php');
 }

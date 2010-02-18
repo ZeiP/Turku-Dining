@@ -3,4 +3,4 @@ RewriteBase /~zeip/Turku-Dining/
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule (.+) ?action=$1 [L]
+RewriteRule (.+) ?action=$1 [L,QSA]
