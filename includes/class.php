@@ -172,15 +172,20 @@ class TurkuDining {
 
     function print_menutable($date) {
     $output = '';
-    $sql = 'SELECT id, name, url
+    $sql = 'SELECT id, name, url, shortname
 	    FROM restaurants
 	    WHERE url IS NOT NULL
 	    ORDER BY shortname';
     $res = $this->db->query($sql);
     $output.= '<table>';
+	$first = TRUE;
     $dbdate = strftime('%Y-%m-%d', $date);
     while ($row = $res->fetch()) {
-	    $output.= '<tr><th colspan="3"><a href="' . $this->html_encode($row['url']) . '">' . $this->html_encode($row['name']) . '</a></th></tr>';
+		if (!$first) {
+			$output.= '</tbody>';
+			$first = FALSE;
+		}
+	    $output.= '<thead><tr><th colspan="3"><a href="#" onclick="return toggleDisplayNode(document.getElementById(\'list_' .  $row['shortname'] . '\'));">' . $this->html_encode($row['name']) . '</a> <span class="restaurantlinks">(<a href="' . $this->html_encode($row['url']) . '">WWW</a>)</span></th></tr></thead><tbody id="list_' . $row['shortname'] . '">';
 	    $sql2 = 'SELECT description, diet, price, studentprice, staffprice, normalprice
 		    FROM servings
 		    WHERE restaurant_id = :id
@@ -206,7 +211,7 @@ class TurkuDining {
 		    $output.= '<tr><td class="description">' . $this->html_encode($row2['description']) . '</td><td class="diet">' . $this->html_encode($row2['diet']) . '</td><td class="price">' . $this->html_encode($price) . '</td></tr>' . "\n";
 	    }
     }
-    $output.= '</table>';
+    $output.= '</tbody></table>';
     return $output;
     }
 

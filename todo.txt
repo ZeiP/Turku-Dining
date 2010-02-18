@@ -10,4 +10,3 @@
 *� N채ytett채v채n p채piv채n valinta
 * N채ytett채vien ravintoloiden valinta
 * Asetusboksin asettelu on huono, menee p채채lle
-  * Miten ois avaa/sulje-linkki (JS)?
