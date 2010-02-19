@@ -6,4 +6,4 @@ try {
 {
 	echo $e->getMessage();
 }
-$db->setAttribute( PDO::ATTR_ERRMODE,  PDO::ERRMODE_WARNING  );
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);

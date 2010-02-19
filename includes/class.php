@@ -198,16 +198,20 @@ class TurkuDining {
 	 * Returns the menu table for the given date; abides user settings.
 	 */
 	function print_menutable($date) {
+		$dbdate = strftime('%Y-%m-%d', $date);
 		$output = '';
-		$sql = 'SELECT id, name, url, shortname
-			FROM restaurants
-			WHERE url IS NOT NULL
-			ORDER BY shortname';
-		$res = $this->db->query($sql);
+		$sql = 'SELECT DISTINCT r.id, r.name, r.url, r.shortname
+			FROM restaurants r
+			JOIN servings s
+			ON s.restaurant_id = r.id
+			WHERE r.url IS NOT NULL AND
+				s.date = :date
+			ORDER BY r.shortname';
+		$qry = $this->db->prepare($sql);
+		$qry->execute(array($dbdate));
 		$output.= '<table>';
 			$first = TRUE;
-		$dbdate = strftime('%Y-%m-%d', $date);
-		while ($row = $res->fetch()) {
+		while ($row = $qry->fetch()) {
 			if (!empty($this->usersettings['exclude_restaurants']) && in_array($row['id'], $this->usersettings['exclude_restaurants'])) {
 				continue;
 			}
