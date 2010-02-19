@@ -4,8 +4,9 @@ class TurkuDining {
     var $db;
     var $usersettings;
 
-	function TurkuDining($db) {
+	function TurkuDining($db, $usersettings) {
 		$this->db = $db;
+		$this->usersettings = $usersettings;
 	}
 
     function fetch_menu($id) {
@@ -181,6 +182,9 @@ class TurkuDining {
 	$first = TRUE;
     $dbdate = strftime('%Y-%m-%d', $date);
     while ($row = $res->fetch()) {
+		if (!empty($this->usersettings['exclude_restaurants']) && in_array($row['id'], $this->usersettings['exclude_restaurants'])) {
+			continue;
+		}
 		if (!$first) {
 			$output.= '</tbody>';
 			$first = FALSE;

@@ -20,6 +20,8 @@ $date = strtotime($datestr);
 	<title>Turku Dining</title>
 	<link rel="stylesheet" type="text/css" href="styles.css" media="screen, projection, tty, tv" />
 	<link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $obj->url('rss'); ?>">
+	<meta name="description" content="Turun opiskelijaruokaloiden ruokalistat yhdellä sivustolla." />
+	<meta name="keywords" content="turku,opiskelijaruokailu,opiskelija,yliopisto,ammattikorkeakoulu,opiskelijaruokala,ravintola,ruokalista,menu" />
 <script type="text/javascript">
 function toggleDisplayNode(obj) {
     if (obj.style.display != "none") {
@@ -60,5 +62,14 @@ echo $obj->print_menutable($date);
 ?>
 
 <div id="footer">Värkin teki <a href="mailto:jyri-petteri.paloposki@iki.fi">ZeiP</a>, palautetta saa lähettää edellämainittuun sähköpostiosoitteeseen.</div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-13105388-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
 </body>
 </html>

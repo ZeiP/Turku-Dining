@@ -22,15 +22,19 @@ if (empty($_SESSION['usersettings']) && !empty($_REQUEST['username']) && isset($
 elseif (!empty($_SESSION['usersettings']) && isset($_REQUEST['save'])) {
 	$_SESSION['usersettings']['showmap'] = (($_REQUEST['showmap'] == 'on') ? 1 : 0);
 	$_SESSION['usersettings']['studentprice'] = (($_REQUEST['studentprice'] == 'on') ? 1 : 0);
+	$_SESSION['usersettings']['exclude_restaurants'] = $_REQUEST['exclude_restaurants'];
 	$sql = 'UPDATE users
 		SET showmap = :showmap,
-			studentprice = :studentprice
+			studentprice = :studentprice,
+			exclude_restaurants = :excluderes
 		WHERE LOWER(username) = LOWER(:username)';
 	$qry = $db->prepare($sql);
-	$qry->execute(array(
+	$data = array(
 		$_SESSION['usersettings']['showmap'],
 		$_SESSION['usersettings']['studentprice'],
-		$_SESSION['usersettings']['username']));
+		((is_array($_REQUEST['exclude_restaurants'])) ? implode(',', $_REQUEST['exclude_restaurants']) : $_REQUEST['exclude_restaurants']),
+		$_SESSION['usersettings']['username']);
+	$qry->execute($data);
 }
 
 if (!empty($_SESSION['usersettings'])) {
@@ -67,6 +71,19 @@ $date = strtotime($datestr);
 	<label for="showmap">Näytä kartta</label></p>
 	<p><input type="checkbox" name="studentprice" id="studentprice" <?php if ($usersettings['studentprice']) echo 'checked="checked" '; ?>/>
 	<label for="studentprice">Näytä vain opiskelijahinta</label></p>
+	<p><label for="exclude_restaurants" style="display: block;">�L� näytä ravintoloita</label>
+	<select name="exclude_restaurants[]" id="exclude_restaurants" multiple="multiple">
+<?php
+	$sql = 'SELECT id, name
+		FROM restaurants';
+	$qry = $db->prepare($sql);
+	$qry->execute();
+	while ($row = $qry->fetch()) {
+		echo '<option value="' . $row['id'] . '"' . ((in_array($row['id'], $obj->usersettings['exclude_restaurants'])) ? ' selected="selected"' : '') . '>' . $obj->html_encode($row['name']) . '</option>
+';
+	}
+?>
+	</select></p>
 	<p id="disclaimer">Huomaathan, että kaikki tiedot ovat vain viitteellisiä!</p>
 	<p><input type="submit" name="save" value="Tallenna" /> <input type="submit" name="logout" value="Kirjaudu ulos" /></p>
 	</form>
