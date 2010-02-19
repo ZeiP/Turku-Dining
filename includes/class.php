@@ -233,6 +233,7 @@ class TurkuDining {
 			$qry2 = $this->db->prepare($sql2);
 			$qry2->execute(array($row['id'], $dbdate));
 			while ($row2 = $qry2->fetch()) {
+				$price = '';
 				if (empty($row['studentprice']) && empty($row['normalprice']) && !empty($row2['price'])) {
 					$pricestr = str_replace(html_entity_decode('&euro;', ENT_QUOTES, 'UTF-8'), '', $row2['price']);
 					$price = explode('/', $pricestr);
@@ -255,7 +256,7 @@ class TurkuDining {
 						$price = implode(' / ', $price);
 					}
 				}
-				elseif (empty($row['studentprice']) && empty($row['normalprice'])) {
+				elseif (!empty($row['studentprice']) && !empty($row['normalprice'])) {
 					if ($this->usersettings['studentprice']) {
 						$price = $row['studentprice'];
 					}
