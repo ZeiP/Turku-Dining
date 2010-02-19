@@ -39,7 +39,7 @@ elseif (!empty($_SESSION['usersettings']) && isset($_REQUEST['save'])) {
 }
 
 if (!empty($_REQUEST['goto'])) {
-	header('Location: ' . htmldecode($_REQUEST['goto']));
+	header('Location: ' . html_entity_decode($_REQUEST['goto']));
 	exit;
 }
 

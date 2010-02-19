@@ -47,7 +47,7 @@ function toggleDisplayNode(obj) {
 <div id="login">
 <?php if (empty($_SESSION['usersettings'])) { ?>
 	<form method="get" action="<?php echo $obj->url('user'); ?>">
-	<input type="hidden" name="goto" value="<?php echo $obj->url(); ?>" />
+	<input type="hidden" name="goto" value="<?php echo htmlentities($obj->url()); ?>" />
 	<p><label for="username">Käyttäjätunnus</label>
 		<input type="text" name="username" id="username" maxlength="30" /></p>
 
@@ -57,7 +57,7 @@ function toggleDisplayNode(obj) {
 	<h2><?php echo $usersettings['username']; ?></h2>
 	<p><a href="<?php echo $obj->url('settings'); ?>">Asetukset</a></p>
 	<form method="get" action="<?php echo $obj->url('user'); ?>">
-	<input type="hidden" name="goto" value="<?php echo $obj->url(); ?>" />
+	<input type="hidden" name="goto" value="<?php echo htmlentities($obj->url()); ?>" />
 	<p><input type="submit" name="logout" value="Kirjaudu ulos" /></p>
 	</form>
 <?php } ?>
