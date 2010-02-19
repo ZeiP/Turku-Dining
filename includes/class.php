@@ -97,8 +97,11 @@ class TurkuDining {
 					$delq->execute(array('resid' => $id, 'date' => $date));
 					$reset_dates[] = $date;
 				}
-				echo 'Inserting ' . $date . ': ' . $array[3][$i] . ' (' . $array[5][$i] . ') @ ' . $array[7][$i] . '<br />';
-				$q->execute(array('descr' => $array[3][$i], 'diet' => $array[5][$i], 'price' => $array[7][$i], 'date' => $date, 'resid' => $id));
+				$descr = html_entity_decode($array[3][$i], ENT_QUOTES, 'UTF-8');
+				$diet = html_entity_decode($array[5][$i], ENT_QUOTES, 'UTF-8');
+				$price = html_entity_decode($array[7][$i], ENT_QUOTES, 'UTF-8');
+				echo 'Inserting ' . $date . ': ' . $descr . ' (' . $diet . ') @ ' . $price . '<br />';
+				$q->execute(array('descr' => $descr, 'diet' => $diet, 'price' => $price, 'date' => $date, 'resid' => $id));
 			}
 		}
 	}
@@ -136,8 +139,11 @@ class TurkuDining {
 					$delq->execute(array('resid' => $id, 'date' => $date));
 					$reset_dates[] = $date;
 				}
-				echo 'Inserting ' . $date . ': ' . $row[0] . ' (' . $row[1] . ') @ ' . $row[2] . ' / ' . $row[3] . '<br />';
-				$q->execute(array('descr' => $row[0], 'diet' => $row[1], 'price' => $row[2] . ' / ' . $row[3], 'date' => $date, 'resid' => $id));
+				$descr = html_entity_decode($row[0], ENT_QUOTES, 'UTF-8');
+				$diet = html_entity_decode($row[1], ENT_QUOTES, 'UTF-8');
+				$price = html_entity_decode(($row[2] . ' / ' . $row['3']), ENT_QUOTES, 'UTF-8');
+				echo 'Inserting ' . $date . ': ' . $descr . ' (' . $diet . ') @ ' . $price . '<br />';
+				$q->execute(array('descr' => $descr, 'diet' => $diet, 'price' => $price, 'date' => $date, 'resid' => $id));
 			}
 		}
 	}
@@ -227,20 +233,35 @@ class TurkuDining {
 			$qry2 = $this->db->prepare($sql2);
 			$qry2->execute(array($row['id'], $dbdate));
 			while ($row2 = $qry2->fetch()) {
-				if (empty($row['studentprice']) && empty($row['normalprice'])) {
-					$price = explode('/', $row2['price']);
-					foreach ($price as $key => $item) {
-						$price[$key] = trim($item);
-					}
-					if ($this->usersettings['studentprice'] && preg_match('/^[0-9\,\. \/]+$/', $price[0])) {
-						$price = $price[0];
+				if (empty($row['studentprice']) && empty($row['normalprice']) && !empty($row2['price'])) {
+					$pricestr = str_replace(html_entity_decode('&euro;', ENT_QUOTES, 'UTF-8'), '', $row2['price']);
+					$price = explode('/', $pricestr);
+//					if (count($price) == 3 || count($price) == 1) {
+					if (preg_match('/^[0-9\.\,\/ ]+$/', $pricestr)) {
+						foreach ($price as $key => $value) {
+							$price[$key] = number_format(str_replace(',', '.', trim($value)), 2, ',', ' ');
+						}
+						if ($this->usersettings['studentprice']) {
+							$price = $price[0];
+						}
+						else {
+							$price = implode(' / ', $price);
+						}
 					}
 					else {
+						foreach ($price as $key => $value) {
+							$price[$key] = trim($value);
+						}
 						$price = implode(' / ', $price);
 					}
 				}
-				else {
-					$price = (($this->usersettings['studentprice']) ? $row['studentprice'] : implode(' / ', array($row['studentprice'], $row['staffprice'], $row['normalprice'])));
+				elseif (empty($row['studentprice']) && empty($row['normalprice'])) {
+					if ($this->usersettings['studentprice']) {
+						$price = $row['studentprice'];
+					}
+					else {
+						$price = implode(' / ', array($row['studentprice'], $row['staffprice'], $row['normalprice']));
+					}
 				}
 				$output.= '<tr><td class="description">' . $this->html_encode($row2['description']) . '</td><td class="diet">' . $this->html_encode($row2['diet']) . '</td><td class="price">' . $this->html_encode($price) . '</td></tr>' . "\n";
 			}
