@@ -1,16 +1,24 @@
 <?php
 
-echo '<?xml version="1.0" encoding="UTF-8"?>
-';
-
-if (strftime('%H') >= 16 || strftime('%u') == 7) { // Kello 17 jälkeen tai sunnuntaisin seuraava päivä
+if (strftime('%H') >= 16 || strftime('%u') == 7)
+{ // On week days after 16 o'clock choosing the next day...
 	$datestr = '+1 day';
 }
-else {
+elseif (strftime('%u') == 6 && strftime('%H') >= 16)
+{ // On Saturdays skipping to Monday after 16 o'clock
+	$datestr = '+2 days';
+}
+else
+{ // Otherwise we'll settle with today's menus...
 	$datestr = 'now';
 }
 
+// Converting the previously-chosen date string to a date.
 $date = strtotime($datestr);
+
+// Can't be printed outside PHP code because of the stupid PHP short tags (<?)
+echo '<?xml version="1.0" encoding="UTF-8"?>
+';
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
@@ -53,10 +61,12 @@ function toggleDisplayNode(obj) {
 <?php } ?>
 </div>
 <?php
-if ($usersettings['showmap']) {
+if ($usersettings['showmap'])
+{ // If user has chosen map to be shown, let's show it by requiring the corresponding file.
 	require('includes/map.php');
 }
 
+// Function, that returns the whole menu table (user prefs are in the $obj class already.)
 echo $obj->print_menutable($date);
 
 ?>

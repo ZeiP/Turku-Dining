@@ -1,41 +1,26 @@
 <?php
 
 header('Content-type: application/rss+xml; charset=utf-8');
-setlocale(LC_ALL, 'fi_FI.utf8');
 
-require('db.php');
-
-if (!empty($_REQUEST['username']) && isset($_REQUEST['newuser'])) {
-	$sql = 'SELECT *
-		FROM users
-		WHERE LOWER(username) = LOWER(:username)
-		LIMIT 1';
-	$qry = $db->prepare($sql);
-	$qry->execute(array($_REQUEST['username']));
-	if ($qry->rowCount() == 0) {
-		$sql = 'INSERT INTO users
-			(username)
-			VALUES(:username)';
-		$qry = $db->prepare($sql);
-		$qry->execute(array($_REQUEST['username']));
-	}
-}
-
-if (!empty($_SESSION['usersettings'])) {
-	$usersettings = $_SESSION['usersettings'];
-}
-
-echo '<?xml version="1.0" encoding="UTF-8"?>
-';
-
-if (strftime('%H') >= 16 || strftime('%u') == 7) { // Kello 17 jälkeen tai sunnuntaisin seuraava päivä
+if (strftime('%H') >= 16 || strftime('%u') == 7)
+{ // On week days after 16 o'clock choosing the next day...
 	$datestr = '+1 day';
 }
-else {
+elseif (strftime('%u') == 6 && strftime('%H') >= 16)
+{ // On Saturdays skipping to Monday after 16 o'clock
+	$datestr = '+2 days';
+}
+else
+{ // Otherwise we'll settle with today's menus...
 	$datestr = 'now';
 }
 
+// Converting the previously-chosen date string to a date.
 $date = strtotime($datestr);
+
+// Can't be printed outside PHP code because of the stupid PHP short tags (<?)
+echo '<?xml version="1.0" encoding="UTF-8"?>
+';
 
 ?>
 <rss version="2.0">
