@@ -38,6 +38,11 @@ elseif (!empty($_SESSION['usersettings']) && isset($_REQUEST['save'])) {
 	header('Location: ' . $obj->url());
 }
 
+if (!empty($_REQUEST['goto'])) {
+	header('Location: ' . htmldecode($_REQUEST['goto']));
+	exit;
+}
+
 if (!empty($_SESSION['usersettings'])) {
 	$usersettings = $_SESSION['usersettings'];
 }

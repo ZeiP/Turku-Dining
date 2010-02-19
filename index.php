@@ -15,6 +15,7 @@ switch (strtolower($_REQUEST['action'])	) {
 		require(IDIR . 'listall.php');
 		break;
 	case 'settings':
+	case 'user':
 		require(IDIR . 'usersettings.php');
 		break;
 	default:
