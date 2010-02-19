@@ -8,5 +8,4 @@
 * Oman tyylitiedoston käyttö
 * Facebook-sovellus
 *� Näytettävän päpivän valinta
-* Näytettävien ravintoloiden valinta
 * Asetusboksin asettelu on huono, menee päälle

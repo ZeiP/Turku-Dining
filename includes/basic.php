@@ -19,7 +19,7 @@ $date = strtotime($datestr);
 <head>
 	<title>Turku Dining</title>
 	<link rel="stylesheet" type="text/css" href="styles.css" media="screen, projection, tty, tv" />
-	<link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $obj->url('rss'); ?>">
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $obj->url('rss'); ?>" />
 	<meta name="description" content="Turun opiskelijaruokaloiden ruokalistat yhdellä sivustolla." />
 	<meta name="keywords" content="turku,opiskelijaruokailu,opiskelija,yliopisto,ammattikorkeakoulu,opiskelijaruokala,ravintola,ruokalista,menu" />
 <script type="text/javascript">

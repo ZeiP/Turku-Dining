@@ -35,6 +35,7 @@ elseif (!empty($_SESSION['usersettings']) && isset($_REQUEST['save'])) {
 		((is_array($_REQUEST['exclude_restaurants'])) ? implode(',', $_REQUEST['exclude_restaurants']) : $_REQUEST['exclude_restaurants']),
 		$_SESSION['usersettings']['username']);
 	$qry->execute($data);
+	header('Location: ' . $obj->url());
 }
 
 if (!empty($_SESSION['usersettings'])) {
@@ -71,11 +72,12 @@ $date = strtotime($datestr);
 	<label for="showmap">N채yt채 kartta</label></p>
 	<p><input type="checkbox" name="studentprice" id="studentprice" <?php if ($usersettings['studentprice']) echo 'checked="checked" '; ?>/>
 	<label for="studentprice">N채yt채 vain opiskelijahinta</label></p>
-	<p><label for="exclude_restaurants" style="display: block;">홎� n채yt채 ravintoloita</label>
+	<p><label for="exclude_restaurants" style="display: block;">채l채 n채yt채 ravintoloita</label>
 	<select name="exclude_restaurants[]" id="exclude_restaurants" multiple="multiple">
 <?php
-	$sql = 'SELECT id, name
-		FROM restaurants';
+	$sql = 'SELECT r.id, r.name
+		FROM restaurants r
+		ORDER BY r.shortname ASC';
 	$qry = $db->prepare($sql);
 	$qry->execute();
 	while ($row = $qry->fetch()) {
@@ -84,6 +86,7 @@ $date = strtotime($datestr);
 	}
 ?>
 	</select></p>
+	<p style="width: 35em;">(Saat valittua useita kohtia painamalla ctrl-n채pp채imen pohjaan ja klikkaamalla haluamasi valituksi. Valinnat voit poistaa painamalla ctrl-n채pp채int채 ja klikkaamalla poistettavia kohtia.)</p>
 	<p id="disclaimer">Huomaathan, ett채 kaikki tiedot ovat vain viitteellisi채!</p>
 	<p><input type="submit" name="save" value="Tallenna" /> <input type="submit" name="logout" value="Kirjaudu ulos" /></p>
 	</form>
