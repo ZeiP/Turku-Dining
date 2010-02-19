@@ -8,7 +8,10 @@ session_start();
 require(IDIR . 'db.php');
 require(IDIR . 'class.php');
 
-if (!empty($_SESSION['usersettings']) || !empty($_REQUEST['username']) && (isset($_REQUEST['login']) || isset($_REQUEST['newuser']))) {
+if (!empty($_SESSION['usersettings']) && isset($_REQUEST['logout'])) {
+	unset($_SESSION['usersettings']);
+}
+elseif (!empty($_SESSION['usersettings']) || !empty($_REQUEST['username']) && (isset($_REQUEST['login']) || isset($_REQUEST['newuser']))) {
 	$sql = 'SELECT *
 		FROM users
 		WHERE LOWER(username) = LOWER(:username)
@@ -19,9 +22,6 @@ if (!empty($_SESSION['usersettings']) || !empty($_REQUEST['username']) && (isset
 		));
 	$row = $qry->fetch(PDO::FETCH_ASSOC);
 	$_SESSION['usersettings'] = $row;
-}
-elseif (!empty($_SESSION['usersettings']) && isset($_REQUEST['logout'])) {
-	unset($_SESSION['usersettings']);
 }
 
 if (!empty($_SESSION['usersettings'])) {

@@ -72,7 +72,7 @@ $date = strtotime($datestr);
 	<label for="showmap">Näytä kartta</label></p>
 	<p><input type="checkbox" name="studentprice" id="studentprice" <?php if ($usersettings['studentprice']) echo 'checked="checked" '; ?>/>
 	<label for="studentprice">Näytä vain opiskelijahinta</label></p>
-	<p><label for="exclude_restaurants" style="display: block;">älä näytä ravintoloita</label>
+	<p><label for="exclude_restaurants" style="display: block;">Älä näytä ravintoloita</label>
 	<select name="exclude_restaurants[]" id="exclude_restaurants" multiple="multiple">
 <?php
 	$sql = 'SELECT r.id, r.name
