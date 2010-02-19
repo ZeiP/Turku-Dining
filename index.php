@@ -9,17 +9,17 @@ require(IDIR . 'init.php');
 // Choosing required action and loading the appropriate page
 switch (strtolower($_REQUEST['action'])	) {
 	case 'rss':
-		require(IDIR . 'rss.php');
+		require(IDIR . 'pages/rss.php');
 		break;
 	case 'listall':
-		require(IDIR . 'listall.php');
+		require(IDIR . 'pages/listall.php');
 		break;
 	case 'settings':
 	case 'user':
-		require(IDIR . 'usersettings.php');
+		require(IDIR . 'pages/settings.php');
 		break;
 	default:
-		require(IDIR . 'basic.php');
+		require(IDIR . 'pages/basic.php');
 }
 
 ?>
