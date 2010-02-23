@@ -295,6 +295,26 @@ class TurkuDining {
 		return $output;
 	}
 
+	function select_date($selected_date) {
+		$sql = 'SELECT DISTINCT STRFTIME(\'%s\', s.date) AS date
+			FROM servings s
+			WHERE s.date = DATE(s.date)
+			ORDER BY s.date ASC';
+		$res = $this->db->query($sql);
+		$result = '<form method="post" action="">
+<p>
+<label for="show_date">Näytä päivä</label>
+<select name="show_date" id="show_date">';
+		while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
+			$result.= '<option value="' . $row['date'] . '"' . ((date('j.n.Y', $selected_date) == date('j.n.Y', $row['date'])) ? ' selected="selected"' : '') . '>' . date('j.n.Y', $row['date']) . '</option>' . "\n";
+		}
+		$result.= '</select>
+</p>
+<p><input type="submit" name="change_date" value="Valitse päivä" /></p>
+</form>';
+		return $result;
+	}
+
 	/*
 	 * First decodes and then encodes a string so that all necessary chars are entitizied, and
 	 *  that for example &#[whatever]; is translated to &euro; instead of &amp;#[whatever];.

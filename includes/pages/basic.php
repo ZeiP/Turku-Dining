@@ -1,20 +1,25 @@
 <?php
 
-if (strftime('%H') >= 16 || strftime('%u') == 7)
-{ // On week days after 16 o'clock choosing the next day...
-	$datestr = '+1 day';
+if (!empty($_SESSION['sessionsettings']['show_date'])) {
+	$date = $_SESSION['sessionsettings']['show_date'];
 }
-elseif (strftime('%u') == 6 && strftime('%H') >= 16)
-{ // On Saturdays skipping to Monday after 16 o'clock
-	$datestr = '+2 days';
-}
-else
-{ // Otherwise we'll settle with today's menus...
-	$datestr = 'now';
-}
+else {
+	if (strftime('%H') >= 16 || strftime('%u') == 7)
+	{ // On week days after 16 o'clock choosing the next day...
+		$datestr = '+1 day';
+	}
+	elseif (strftime('%u') == 6 && strftime('%H') >= 16)
+	{ // On Saturdays skipping to Monday after 16 o'clock
+		$datestr = '+2 days';
+	}
+	else
+	{ // Otherwise we'll settle with today's menus...
+		$datestr = 'now';
+	}
 
-// Converting the previously-chosen date string to a date.
-$date = strtotime($datestr);
+	// Converting the previously-chosen date string to a date.
+	$date = strtotime($datestr);
+}
 
 // Can't be printed outside PHP code because of the stupid PHP short tags (<?)
 echo '<?xml version="1.0" encoding="UTF-8"?>
@@ -50,7 +55,6 @@ function toggleDisplayNode(obj) {
 	<input type="hidden" name="goto" value="<?php echo htmlentities($obj->url()); ?>" />
 	<p><label for="username">Käyttäjätunnus</label>
 		<input type="text" name="username" id="username" maxlength="30" /></p>
-
 	<p><input type="submit" name="login" value="Kirjaudu sisään" /> <input type="submit" name="newuser" value="Uusi käyttäjä" /></p>
 	</form>
 <?php } else { ?>
@@ -61,6 +65,7 @@ function toggleDisplayNode(obj) {
 	<p><input type="submit" name="logout" value="Kirjaudu ulos" /></p>
 	</form>
 <?php } ?>
+<?php echo $obj->select_date($date); ?>
 </div>
 <?php
 if ($usersettings['showmap'])
