@@ -176,11 +176,14 @@ class TurkuDining {
 	 * Make a decent date out of a Finnish weekday and a week number...
 	 */
 	function format_date($weekday, $week) {
-		$datestring = $week . '-' . $weekday;
-		echo 'Formatting ' . $datestring;
-		$dateparts = strptime($datestring, '%U-%u');
+		echo 'Formatting ' . $weekday . ' / ' . $week . "\n";
+		$fourth_january_weekday = date('N', mktime(0, 0, 0, 1, 4));
+		$week1_sunday = 4+(7-$fourth_january_weekday); // Day number of the Sunday of the 1st week
+		$weeks_sunday = $week1_sunday+(($week-1)*7);
+		$weeks_day = $weeks_sunday-(7-$weekday);
+		$dateparts = strptime($weeks_day . '-' . date('Y'), '%j-%Y');
 		$date = date('Y') . '-' . str_pad($dateparts['tm_mon'] + 1, 2, '0', STR_PAD_LEFT) . '-' . str_pad($dateparts['tm_mday'], 2, 0, STR_PAD_LEFT);
-		print_r($dateparts);
+		echo $date;
 		return $date;
 	}
 
