@@ -49,10 +49,12 @@ p#disclaimer {
 }
 
 div#footer {
-	padding: 1em;
 	margin: 1em;
-	background-color: lightgray;
 	display: block;
+}
+#footer p#credits {
+	background-color: silver;
+	padding: 1em;
 }
 span.restaurantlinks {
 	font-size: 70%;

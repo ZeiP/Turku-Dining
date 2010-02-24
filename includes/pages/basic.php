@@ -21,30 +21,16 @@ else {
 	$date = strtotime($datestr);
 }
 
-// Can't be printed outside PHP code because of the stupid PHP short tags (<?)
-echo '<?xml version="1.0" encoding="UTF-8"?>
-';
-
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fi" lang="fi">
+<!DOCTYPE html>
+<html lang="fi">
 <head>
 	<title>Turku Dining</title>
 	<link rel="stylesheet" type="text/css" href="styles.css" media="screen, projection, tty, tv" />
 	<link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $obj->url('rss'); ?>" />
 	<meta name="description" content="Turun opiskelijaruokaloiden ruokalistat yhdellä sivustolla." />
 	<meta name="keywords" content="turku,opiskelijaruokailu,opiskelija,yliopisto,ammattikorkeakoulu,opiskelijaruokala,ravintola,ruokalista,menu" />
-<script type="text/javascript">
-function toggleDisplayNode(obj) {
-    if (obj.style.display != "none") {
-        obj.style.display = "none";
-    }
-    else {
-        obj.style.display = "";
-    }
-}
-</script>
+	<script type="text/javascript" src="script.js"></script>
 </head>
 <body>
 <h1>Minne mennä?</h1>
@@ -78,7 +64,13 @@ echo $obj->print_menutable($date);
 
 ?>
 
-<div id="footer">Värkin teki <a href="mailto:jyri-petteri.paloposki@iki.fi">ZeiP</a>, palautetta saa lähettää edellämainittuun sähköpostiosoitteeseen.</div>
+<div id="footer">
+<p id="credits">Värkin teki <a href="mailto:jyri-petteri.paloposki@iki.fi">ZeiP</a>, palautetta saa lähettää edellämainittuun sähköpostiosoitteeseen.</p>
+<p>
+<a href="http://validator.w3.org/check?uri=referer">Valid HTML5!</a>
+<a href="http://jigsaw.w3.org/css-validator/check/referer"><img style="border:0;width:88px;height:31px" src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!" /></a>
+</p>
+</div>
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));

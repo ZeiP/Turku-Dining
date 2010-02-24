@@ -228,7 +228,7 @@ class TurkuDining {
 				$output.= '</tbody>';
 				$first = FALSE;
 			}
-			$output.= '<thead><tr><th colspan="3"><a href="#" onclick="return toggleDisplayNode(document.getElementById(\'list_' .  $row['shortname'] . '\'));">' . $this->html_encode($row['name']) . '</a> <span class="restaurantlinks">(<a href="' . $this->html_encode($row['url']) . '">WWW</a>)</span></th></tr></thead><tbody id="list_' . $row['shortname'] . '">';
+			$output.= '<tbody id="head_' . $row['shortname'] . '"><tr class="restaurant_head"><th colspan="3"><a href="#" onclick="return toggleDisplayNode(document.getElementById(\'list_' .  $row['shortname'] . '\'));">' . $this->html_encode($row['name']) . '</a> <span class="restaurantlinks">(<a href="' . $this->html_encode($row['url']) . '">WWW</a>)</span></th></tr></tbody><tbody id="list_' . $row['shortname'] . '">';
 			$sql2 = 'SELECT description, diet, price, studentprice, staffprice, normalprice
 				FROM servings
 				WHERE restaurant_id = :id
@@ -240,7 +240,6 @@ class TurkuDining {
 				if (empty($row['studentprice']) && empty($row['normalprice']) && !empty($row2['price'])) {
 					$pricestr = str_replace(html_entity_decode('&euro;', ENT_QUOTES, 'UTF-8'), '', $row2['price']);
 					$price = explode('/', $pricestr);
-//					if (count($price) == 3 || count($price) == 1) {
 					if (preg_match('/^[0-9\.\,\/ ]+$/', $pricestr)) {
 						foreach ($price as $key => $value) {
 							$price[$key] = number_format(str_replace(',', '.', trim($value)), 2, ',', ' ');
