@@ -34,6 +34,7 @@ else {
 </head>
 <body>
 <h1>Minne mennä?</h1>
+<p>Lista turkulaisista opiskelijaravintoloista ja niiden ruokalistoista. Lisää ravintoloita voi ehdottaa sivun alalaidasta löytyvään sähköpostiosoitteeseen.</p>
 <h2><?php echo ucfirst(strftime('%Ana %d.%m.%Y', $date)); ?></h2>
 <div id="login">
 <?php if (empty($_SESSION['usersettings'])) { ?>
@@ -54,7 +55,7 @@ else {
 <?php echo $obj->select_date($date); ?>
 </div>
 <?php
-if ($usersettings['showmap'])
+if ($usersettings['showmap'] && !empty($cloudmade_id))
 { // If user has chosen map to be shown, let's show it by requiring the corresponding file.
 	require('includes/map.php');
 }

@@ -3,7 +3,7 @@
 
 <script type="text/javascript" src="http://tile.cloudmade.com/wml/latest/web-maps-lite.js"></script>
 <script type="text/javascript">
-	var cloudmade = new CM.Tiles.CloudMade.Web({key: 'a50e989cbcbc4897a5ec2be44e8c575a'});
+	var cloudmade = new CM.Tiles.CloudMade.Web({key: '<?php echo $cloudmade_id; ?>'});
 	var map = new CM.Map('kartta', cloudmade);
 
 <?php
@@ -24,7 +24,7 @@ var marker' . htmlspecialchars(ucfirst($row['shortname'])) . ' = new CM.Marker(m
 	}
 }
 ?>
-	map.setCenter(new CM.LatLng(60.4539, 22.2877407073974628774070739746), 15);
+	map.setCenter(new CM.LatLng(60.4537, 22.2877407073974628774070739746), 15);
 
 <?php
 foreach ($markers as $marker) {
