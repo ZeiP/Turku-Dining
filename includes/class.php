@@ -58,6 +58,21 @@ class TurkuDining {
 			$return = $rows;
 			$this->handle_fazeramica_menu($return, $date, $id);
 		}
+		elseif ($row['parser'] == 'turku') {
+			preg_match('/Ruokalista - Opiskelijaravintola V\.I\.P<\/h1>.+?viikko \d.+?<p>(.*)\<div id=\"contentArticleHack/s', $file, $matches);
+			$file = $matches[1];
+
+			$regexp_parts = array(
+				'<b>(Maanatai|Maanantai|Tiistai|Keskiviikko|Torstai|Perjantai) (\d{1,2}\.\d{1,2})\.?<\/b>', // Päivät
+				'<p>([^<].*?)<\/p>', // Ruoat
+				);
+
+			preg_match_all('/' . implode($regexp_parts, '|') . '/s', $file, $matches);
+
+			$return = array($matches[2], $matches[3]);
+
+			$this->handle_turku_menu($return, $row['id']);
+		}
 		else {
 			return FALSE;
 		}
@@ -74,7 +89,7 @@ class TurkuDining {
 			(description, diet, price, date, restaurant_id)
 			VALUES(:descr, :diet, :price, DATE(:date), :resid)';
 		$q = $this->db->prepare($sql);
-			$reset_dates = array();
+		$reset_dates = array();
 		for ($i = 0; $i <= count($array[0]); $i++) {
 			if (!empty($array[1][$i])) {
 				$currweek = $array[1][$i];
@@ -104,6 +119,43 @@ class TurkuDining {
 				}
 				$diet = html_entity_decode($array[5][$i], ENT_QUOTES, 'UTF-8');
 				$price = html_entity_decode($array[7][$i], ENT_QUOTES, 'UTF-8');
+				echo 'Inserting ' . $date . ': ' . $descr . ' (' . $diet . ') @ ' . $price . '<br />';
+				$q->execute(array('descr' => $descr, 'diet' => $diet, 'price' => $price, 'date' => $date, 'resid' => $id));
+			}
+		}
+	}
+
+	/*
+	 * Handle a Turku menu input and save it to database. Quite a bit of overlapping code with handle_unica_menu().
+	 */
+	function handle_turku_menu($array, $id) {
+		$date = NULL;
+		$sql = 'INSERT INTO servings
+			(description, diet, price, date, restaurant_id)
+			VALUES(:descr, :diet, :price, DATE(:date), :resid)';
+		$q = $this->db->prepare($sql);
+		$reset_dates = array();
+		for ($i = 0; $i <= count($array[0]); $i++) {
+			if (!empty($array[0][$i])) {
+				$date = $this->format_turku_date($array[0][$i]);
+				echo $date;
+			}
+			// Poistetaan kaikki whitespace alusta ja lopusta (trim():in erillinen argumentti tarpeen, jotta myös nbsp:t (0xA0) saadaan pois.)
+			$array[1][$i] = trim(html_entity_decode($array[1][$i]), "\x20\x9\x0A\x0D\x00\x0B\xA0");
+			if (!empty($array[1][$i])) {
+				if (!in_array($date, $reset_dates)) {
+					$sql = 'DELETE FROM servings
+						WHERE restaurant_id = :resid
+							AND date = :date';
+					$delq = $this->db->prepare($sql);
+					$delq->execute(array('resid' => $id, 'date' => $date));
+					$reset_dates[] = $date;
+				}
+				$descr = html_entity_decode(str_replace("\xA0", ' ', $array[1][$i]), ENT_QUOTES, 'UTF-8');
+				$diet = '';
+				$price = '';
+//				$diet = html_entity_decode($array[5][$i], ENT_QUOTES, 'UTF-8');
+//				$price = html_entity_decode($array[7][$i], ENT_QUOTES, 'UTF-8');
 				echo 'Inserting ' . $date . ': ' . $descr . ' (' . $diet . ') @ ' . $price . '<br />';
 				$q->execute(array('descr' => $descr, 'diet' => $diet, 'price' => $price, 'date' => $date, 'resid' => $id));
 			}
@@ -178,6 +230,14 @@ class TurkuDining {
 			default:
 				return NULL;
 		}
+	}
+
+	function format_turku_date($date) {
+		$date = explode('.', $date);
+		$date[] = date('Y');
+		$date[0] = str_pad($date[0], 2, '0', STR_PAD_LEFT);
+		$date[1] = str_pad($date[1], 2, '0', STR_PAD_LEFT);
+		return implode('-', array_reverse($date));
 	}
 
 	/*
