@@ -98,6 +98,10 @@ class TurkuDining {
 					$reset_dates[] = $date;
 				}
 				$descr = html_entity_decode($array[3][$i], ENT_QUOTES, 'UTF-8');
+				if ($descr == 'Assarin Ullakko palvelee lauantaisin! Lounas klo 11.30-16.00')
+				{ // Ei tallenneta Bryggen Assari-mainosta...
+					continue;
+				}
 				$diet = html_entity_decode($array[5][$i], ENT_QUOTES, 'UTF-8');
 				$price = html_entity_decode($array[7][$i], ENT_QUOTES, 'UTF-8');
 				echo 'Inserting ' . $date . ': ' . $descr . ' (' . $diet . ') @ ' . $price . '<br />';
@@ -140,6 +144,10 @@ class TurkuDining {
 					$reset_dates[] = $date;
 				}
 				$descr = html_entity_decode($row[0], ENT_QUOTES, 'UTF-8');
+				if ($descr == 'Rehtoripellonkatu 3, 20500')
+				{ // Ei tallenneta osoiteriviä...
+					continue;
+				}
 				$diet = html_entity_decode($row[1], ENT_QUOTES, 'UTF-8');
 				$price = html_entity_decode(($row[2] . ' / ' . $row['3']), ENT_QUOTES, 'UTF-8');
 				echo 'Inserting ' . $date . ': ' . $descr . ' (' . $diet . ') @ ' . $price . '<br />';
