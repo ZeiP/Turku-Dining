@@ -31,6 +31,23 @@ class TurkuDining {
 
 			$file = $matches[1];
 
+			$sql = 'SELECT COUNT(*)
+				FROM menupages
+				WHERE restaurant_id = :rid AND
+					url = :url AND
+					content_sha1 = :csha1';
+			$qry = $this->db->prepare($sql);
+			$res = $qry->execute(array($row['id'], $row['url'], sha1($file)));
+			if ($qry->fetchColumn() > 0) {
+				return TRUE;
+			}
+
+			$sql = 'INSERT INTO menupages
+				(url, restaurant_id, content_sha1)
+				VALUES(:url, :rid, :csha1)';
+			$qry = $this->db->prepare($sql);
+			$qry->execute(array($row['url'], $row['id'], sha1($file)));
+
 			$regexp_parts = array(
 				'<h1>\s*Lounaat viikolla (\d+)\s*<\/h1>', // Viikot
 				'<h3><a[^>]*>(.*?)<\/a>.*?<\/h3>', // P�iv�t
@@ -44,6 +61,23 @@ class TurkuDining {
 			preg_match('/<span>ruokalista<\/span>(.*)?<\/span>/s', $file, $matches);
 
 			$file = $matches[1];
+
+			$sql = 'SELECT COUNT(*)
+				FROM menupages
+				WHERE restaurant_id = :rid AND
+					url = :url AND
+					content_sha1 = :csha1';
+			$qry = $this->db->prepare($sql);
+			$res = $qry->execute(array($row['id'], $row['url'], sha1($file)));
+			if ($qry->fetchColumn() > 0) {
+				return TRUE;
+			}
+
+			$sql = 'INSERT INTO menupages
+				(url, restaurant_id, content_sha1)
+				VALUES(:url, :rid, :csha1)';
+			$qry = $this->db->prepare($sql);
+			$qry->execute(array($row['url'], $row['id'], sha1($file)));
 			
 			preg_match('/&nbsp;\s+(\d{1,2})\.(\d{1,2}\.?)\s*-\s*\d{1,2}\.\d{1,2}\.?/', $file, $date);
 			$date = array(date('Y'), str_pad($date[2], 2, 0, STR_PAD_LEFT), str_pad($date[1], 2, 0, STR_PAD_LEFT));
@@ -61,6 +95,23 @@ class TurkuDining {
 		elseif ($row['parser'] == 'turku') {
 			preg_match('/Ruokalista - Opiskelijaravintola V\.I\.P<\/h1>.+?viikko \d.+?<p>(.*)\<div id=\"contentArticleHack/s', $file, $matches);
 			$file = $matches[1];
+
+			$sql = 'SELECT COUNT(*)
+				FROM menupages
+				WHERE restaurant_id = :rid AND
+					url = :url AND
+					content_sha1 = :csha1';
+			$qry = $this->db->prepare($sql);
+			$res = $qry->execute(array($row['id'], $row['url'], sha1($file)));
+			if ($qry->fetchColumn() > 0) {
+				return TRUE;
+			}
+
+			$sql = 'INSERT INTO menupages
+				(url, restaurant_id, content_sha1)
+				VALUES(:url, :rid, :csha1)';
+			$qry = $this->db->prepare($sql);
+			$qry->execute(array($row['url'], $row['id'], sha1($file)));
 
 			$regexp_parts = array(
 				'<b>(Maanatai|Maanantai|Tiistai|Keskiviikko|Torstai|Perjantai) (\d{1,2}\.\d{1,2})\.?<\/b>', // Päivät
