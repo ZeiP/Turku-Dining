@@ -5,6 +5,7 @@ setlocale(LC_ALL, 'fi_FI.utf8');
 
 session_start();
 
+require(IDIR . 'site_config.php');
 require(IDIR . 'db.php');
 require(IDIR . 'class.php');
 
