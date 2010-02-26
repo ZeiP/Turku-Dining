@@ -322,21 +322,45 @@ class TurkuDining {
 		return $output;
 	}
 
+	function parse_restaurantslist($restaurants = array()) {
+		$sql = 'SELECT r.id
+			FROM restaurants r
+			WHERE LOWER(shortname) = LOWER(:rname)';
+		$qry = $this->db->prepare($sql);
+		foreach ($restaurants as $key => $value) {
+			if (!is_numeric($value)) {
+				$qry->execute(array($value));
+				if (!($row = $qry->fetch())) {
+					continue;
+				}
+				$restaurants[$key] = $row['id'];
+			}
+		}
+		return $restaurants;
+	}
+
 	/*
 	 * Returns the menu table for the given date; abides user settings.
 	 */
-	function print_menutable($date) {
+	function print_menutable($date, $show_restaurants = array()) {
+		$show_restaurants = $this->parse_restaurantslist($show_restaurants);
 		$dbdate = strftime('%Y-%m-%d', $date);
 		$output = '';
+		foreach ($show_restaurants as $key => $value) {
+			$show_restaurants[$key] = $this->db->quote($value);
+		}
 		$sql = 'SELECT DISTINCT r.id, r.name, r.url, r.shortname
 			FROM restaurants r
 			JOIN servings s
 			ON s.restaurant_id = r.id
-			WHERE r.url IS NOT NULL AND
-				s.date = :date
+			WHERE r.url IS NOT NULL
+				AND s.date = :date
+				AND r.id IN (' . implode(', ', $show_restaurants) . ')
 			ORDER BY r.shortname';
 		$qry = $this->db->prepare($sql);
-		$qry->execute(array($dbdate));
+		$qry->execute(array(
+			'date' => $dbdate,
+			));
 		$output.= '<table>';
 			$first = TRUE;
 		while ($row = $qry->fetch()) {

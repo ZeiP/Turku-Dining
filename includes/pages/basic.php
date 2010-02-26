@@ -1,5 +1,10 @@
 <?php
 
+$show_restaurants = array();
+if (preg_match('/r\/([^\/]+)/', $_REQUEST['action'], $matches) != 0) {
+	$show_restaurants = explode(';', $matches[1]);
+}
+
 if (!empty($_SESSION['sessionsettings']['show_date'])) {
 	$date = $_SESSION['sessionsettings']['show_date'];
 }
@@ -26,11 +31,11 @@ else {
 <html lang="fi">
 <head>
 	<title>Turku Dining</title>
-	<link rel="stylesheet" type="text/css" href="styles.css" media="screen, projection, tty, tv" />
+	<link rel="stylesheet" type="text/css" href="<?php echo $obj->url('styles.css'); ?>" media="screen, projection, tty, tv" />
 	<link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $obj->url('rss'); ?>" />
 	<meta name="description" content="Turun opiskelijaruokaloiden ruokalistat yhdellä sivustolla." />
 	<meta name="keywords" content="turku,opiskelijaruokailu,opiskelija,yliopisto,ammattikorkeakoulu,opiskelijaruokala,ravintola,ruokalista,menu" />
-	<script type="text/javascript" src="script.js"></script>
+	<script type="text/javascript" src="<?php echo $obj->url('script.js'); ?>"></script>
 </head>
 <body>
 <h1>Minne mennä?</h1>
@@ -55,13 +60,14 @@ else {
 <?php echo $obj->select_date($date); ?>
 </div>
 <?php
+
 if ($usersettings['showmap'] && !empty($cloudmade_id))
 { // If user has chosen map to be shown, let's show it by requiring the corresponding file.
 	require('includes/map.php');
 }
 
-// Function, that returns the whole menu table (user prefs are in the $obj class already.)
-echo $obj->print_menutable($date);
+// Function that returns the whole menu table (user prefs are in the $obj class already.)
+echo $obj->print_menutable($date, $show_restaurants);
 
 ?>
 
@@ -79,8 +85,8 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
 </script>
 <script type="text/javascript">
 try {
-var pageTracker = _gat._getTracker("<?php echo $google_ua; ?>");
-pageTracker._trackPageview();
+	var pageTracker = _gat._getTracker("<?php echo $google_ua; ?>");
+	pageTracker._trackPageview();
 } catch(err) {}</script>
 <?php } ?>
 </body>
