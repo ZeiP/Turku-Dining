@@ -354,9 +354,11 @@ class TurkuDining {
 			JOIN servings s
 			ON s.restaurant_id = r.id
 			WHERE r.url IS NOT NULL
-				AND s.date = :date
-				AND r.id IN (' . implode(', ', $show_restaurants) . ')
-			ORDER BY r.shortname';
+				AND s.date = :date';
+		if (!empty($show_restaurants)) {
+			$sql.= ' AND r.id IN (' . implode(', ', $show_restaurants) . ')';
+		}
+		$sql.= ' ORDER BY r.shortname';
 		$qry = $this->db->prepare($sql);
 		$qry->execute(array(
 			'date' => $dbdate,
