@@ -411,7 +411,7 @@ class TurkuDining {
 						$price = implode(' / ', array($row['studentprice'], $row['staffprice'], $row['normalprice']));
 					}
 				}
-				$output.= '<tr><td class="description">' . $this->html_encode($row2['description']) . '</td><td class="diet">' . $this->html_encode($row2['diet']) . '</td><td class="price">' . $this->html_encode($price) . '</td></tr>' . "\n";
+				$output.= '<tr><td class="description">' . ucfirst($this->html_encode($row2['description'])) . '</td><td class="diet">' . $this->html_encode($row2['diet']) . '</td><td class="price">' . $this->html_encode($price) . '</td></tr>' . "\n";
 			}
 		}
 		$output.= '</tbody></table>';

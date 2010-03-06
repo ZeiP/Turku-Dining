@@ -9,13 +9,13 @@ if (!empty($_SESSION['sessionsettings']['show_date'])) {
 	$date = $_SESSION['sessionsettings']['show_date'];
 }
 else {
-	if (strftime('%H') >= 16 || strftime('%u') == 7)
-	{ // On week days after 16 o'clock choosing the next day...
-		$datestr = '+1 day';
-	}
-	elseif (strftime('%u') == 6 && strftime('%H') >= 16)
+	if (strftime('%u') == 6 && strftime('%H') >= 16)
 	{ // On Saturdays skipping to Monday after 16 o'clock
 		$datestr = '+2 days';
+	}
+	elseif (strftime('%H') >= 16 || strftime('%u') == 7)
+	{ // On week days after 16 o'clock choosing the next day...
+		$datestr = '+1 day';
 	}
 	else
 	{ // Otherwise we'll settle with today's menus...

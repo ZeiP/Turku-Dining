@@ -6,7 +6,7 @@
 	var cloudmade = new CM.Tiles.CloudMade.Web({key: '<?php echo $cloudmade_id; ?>'});
 	var map = new CM.Map('kartta', cloudmade);
 
-	map.setCenter(new CM.LatLng(60.4537, 22.2877407073974628774070739746), 15);
+	map.setCenter(new CM.LatLng(60.4518, 22.293), 15);
 <?php
 $sql = 'SELECT name, longitude, latitude, shortname
         FROM restaurants
