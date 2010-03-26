@@ -46,7 +46,7 @@ for ($i = 0; $i <= 23; $i++) {
 <description>
 <?php
 
-echo htmlspecialchars($obj->print_menutable($date, $db));
+echo htmlspecialchars($obj->print_menutable($date));
 
 ?>
 </description>
